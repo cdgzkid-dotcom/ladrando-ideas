@@ -175,7 +175,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: calc(1rem + env(safe-area-inset-top)) 2.5rem 1rem 2.5rem;
+    padding: 1rem 2.5rem;
     background: #04040a;
     border-bottom: 1px solid rgba(0,240,255,0.12);
   }
@@ -214,6 +214,16 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--cyan); }
+
+  /* ======== SAFE AREA TOP COVER ======== */
+  #safeAreaCover {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: env(safe-area-inset-top, 0px);
+    background: #04040a;
+    z-index: 200;
+  }
+  body.light-mode #safeAreaCover { background: #f0f0ff; }
 
   /* ======== HAMBURGER MENU ======== */
   .nav-hamburger {
@@ -283,12 +293,12 @@
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .nav-hamburger { display: flex; }
-    nav { padding: calc(0.85rem + env(safe-area-inset-top)) 1.2rem 0.85rem 1.2rem; }
+    nav { padding: 0.85rem 1.2rem; }
   }
 
   /* ======== HERO ======== */
   .hero-section {
-    padding-top: calc(130px + env(safe-area-inset-top));
+    padding-top: calc(130px + env(safe-area-inset-top, 0px));
     display: flex;
     align-items: flex-start;
   }
@@ -993,6 +1003,8 @@
 <div class="orb orb2"></div>
 
 <!-- NAV -->
+<!-- Tapa el notch/safe-area del iPhone con el color del nav -->
+<div id="safeAreaCover"></div>
 <nav>
   <a href="#" class="nav-logo">
     <img src="" class="cover-ref" alt="Ladrando Ideas">
