@@ -1297,13 +1297,32 @@
     if(igBg) igBg.style.backgroundImage = 'url(' + masterSrc + ')';
   }
 
-  // ── THEME TOGGLE ──
+  // ── THEME — auto por hora + toggle manual ──
+  // 8:00am–7:00pm → day mode  |  7:00pm–8:00am → dark mode
+  var manualTheme = false;
+
+  function applyAutoTheme() {
+    if (manualTheme) return;
+    var h = new Date().getHours();
+    var isDay = (h >= 8 && h < 19);   // 8am a 7pm = day mode
+    if (isDay) {
+      document.body.classList.add('light-mode');
+    } else {
+      document.body.classList.remove('light-mode');
+    }
+  }
+
+  applyAutoTheme();
+
+  // Re-verificar cada minuto (por si la pestaña queda abierta)
+  setInterval(function() {
+    if (!manualTheme) applyAutoTheme();
+  }, 60000);
+
   const themeBtn = document.getElementById('themeToggle');
-  const saved = localStorage.getItem('li-theme');
-  if(saved === 'light') document.body.classList.add('light-mode');
   themeBtn?.addEventListener('click', () => {
+    manualTheme = true;
     document.body.classList.toggle('light-mode');
-    localStorage.setItem('li-theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
   });
 
   // ── PAW TRAIL — strictly one paw at a time, many positions ──
