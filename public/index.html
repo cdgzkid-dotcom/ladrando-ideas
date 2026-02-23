@@ -1421,6 +1421,12 @@
   // 8:00am–7:00pm → day mode  |  7:00pm–8:00am → dark mode
   var manualTheme = false;
 
+  function updateThemeColor() {
+    var isLight = document.body.classList.contains('light-mode');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', isLight ? '#f0f0ff' : '#04040a');
+  }
+
   function applyAutoTheme() {
     if (manualTheme) return;
     var h = new Date().getHours();
@@ -1430,6 +1436,7 @@
     } else {
       document.body.classList.remove('light-mode');
     }
+    updateThemeColor();
   }
 
   applyAutoTheme();
@@ -1443,6 +1450,7 @@
   themeBtn?.addEventListener('click', () => {
     manualTheme = true;
     document.body.classList.toggle('light-mode');
+    updateThemeColor();
   });
 
   // ── PAW TRAIL — strictly one paw at a time, many positions ──
