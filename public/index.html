@@ -216,6 +216,77 @@
   }
   .nav-links a:hover { color: var(--cyan); }
 
+  /* ======== HAMBURGER MENU ======== */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 110;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--cyan);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
+  /* X cuando está abierto */
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 64px;
+    left: 0; right: 0;
+    z-index: 99;
+    background: rgba(4,4,10,0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,240,255,0.15);
+    padding: 1.5rem 2rem;
+    flex-direction: column;
+    gap: 0;
+    transform: translateY(-8px);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .nav-mobile-menu.open {
+    display: flex;
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .nav-mobile-menu a {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--dim);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: color 0.2s;
+    display: block;
+  }
+  .nav-mobile-menu a:last-child { border-bottom: none; }
+  .nav-mobile-menu a:hover, .nav-mobile-menu a:active { color: var(--cyan); }
+
+  body.light-mode .nav-mobile-menu { background: rgba(240,240,255,0.97); }
+  body.light-mode .nav-hamburger span { background: #3a3a6a; }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    nav { padding: 0.85rem 1.2rem; }
+  }
+
   /* ======== HERO ======== */
   .hero-section {
     padding-top: 130px;
@@ -934,15 +1005,27 @@
     <li><a href="#social">REDES</a></li>
     <li><a href="#newsletter">NEWSLETTER</a></li>
   </ul>
-  <div style="display:flex;align-items:center;gap:1.5rem;position:relative;">
+  <div style="display:flex;align-items:center;gap:1rem;position:relative;">
     <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
       <span class="toggle-thumb"></span>
       <span class="toggle-icon icon-moon">🌙</span>
       <span class="toggle-icon icon-sun">☀️</span>
     </button>
-
+    <button class="nav-hamburger" id="navHamburger" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </nav>
+
+<!-- Menú mobile -->
+<div class="nav-mobile-menu" id="navMobileMenu">
+  <a href="#episodios">EPISODIOS</a>
+  <a href="#plataformas">ESCUCHAR</a>
+  <a href="#social">REDES</a>
+  <a href="#newsletter">NEWSLETTER</a>
+</div>
 
 <!-- HERO -->
 <section class="hero-section">
@@ -1213,6 +1296,37 @@
       document.getElementById('contactSuccess').classList.add('show');
     });
   }
+
+  // ── HAMBURGER MENU ──
+  (function() {
+    var btn  = document.getElementById('navHamburger');
+    var menu = document.getElementById('navMobileMenu');
+    if (!btn || !menu) return;
+
+    function closeMenu() {
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+    }
+
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = menu.classList.contains('open');
+      if (isOpen) { closeMenu(); } else {
+        btn.classList.add('open');
+        menu.classList.add('open');
+      }
+    });
+
+    // Cerrar al hacer click en un link
+    menu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', closeMenu);
+    });
+
+    // Cerrar al hacer click fuera
+    document.addEventListener('click', function(e) {
+      if (!menu.contains(e.target) && e.target !== btn) closeMenu();
+    });
+  })();
 
   function resetContact() {
     document.getElementById('contactCard').style.display = 'flex';
