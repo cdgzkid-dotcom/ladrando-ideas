@@ -176,9 +176,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2.5rem;
-    background: rgba(4,4,10,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(0,240,255,0.08);
+    background: #04040a;
+    border-bottom: 1px solid rgba(0,240,255,0.12);
   }
 
   .nav-logo {
@@ -248,8 +247,7 @@
     top: 64px;
     left: 0; right: 0;
     z-index: 99;
-    background: rgba(4,4,10,0.97);
-    backdrop-filter: blur(20px);
+    background: #04040a;
     border-bottom: 1px solid rgba(0,240,255,0.15);
     padding: 1.5rem 2rem;
     flex-direction: column;
@@ -278,7 +276,8 @@
   .nav-mobile-menu a:last-child { border-bottom: none; }
   .nav-mobile-menu a:hover, .nav-mobile-menu a:active { color: var(--cyan); }
 
-  body.light-mode .nav-mobile-menu { background: rgba(240,240,255,0.97); }
+  body.light-mode nav { background: #f0f0ff; border-bottom: 1px solid rgba(0,0,180,0.1); }
+  body.light-mode .nav-mobile-menu { background: #f0f0ff; }
   body.light-mode .nav-hamburger span { background: #3a3a6a; }
 
   @media (max-width: 768px) {
