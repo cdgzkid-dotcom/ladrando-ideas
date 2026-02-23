@@ -1,0 +1,13 @@
+{
+  "name": "ladrando-ideas",
+  "version": "1.0.0",
+  "description": "Sitio web del podcast Ladrando Ideas",
+  "scripts": {
+    "dev": "npx serve public -p 3000",
+    "start": "npx serve public -p 3000",
+    "build": "echo 'Static site, no build needed'"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
