@@ -315,12 +315,17 @@
 
   /* Paw trail - JS controlled */
   .paw-trail { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+  /* Dark mode: huellas blancas con glow blanco */
   .paw-step {
     position: fixed;
     font-size: 1.3rem;
     opacity: 0;
     pointer-events: none;
-    filter: drop-shadow(0 0 6px rgba(0,240,255,0.6));
+    filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255,255,255,0.7));
+  }
+  /* Light mode: huellas oscuras naturales */
+  body.light-mode .paw-step {
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.25));
   }
 
   /* ======== SECTION COMMONS ======== */
@@ -1372,7 +1377,7 @@
     const el = document.createElement('span');
     el.className = 'paw-step';
     el.textContent = '🐾';
-    el.style.cssText = 'position:fixed;font-size:1.4rem;opacity:0;pointer-events:none;filter:drop-shadow(0 0 8px rgba(0,240,255,0.7));';
+    el.style.cssText = 'position:fixed;font-size:1.4rem;opacity:0;pointer-events:none;';
     trail.appendChild(el);
 
     let cur = 0;
