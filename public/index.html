@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ladrando Ideas — Podcast</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -172,6 +172,7 @@
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
+    isolation: isolate;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -214,16 +215,6 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--cyan); }
-
-  /* ======== SAFE AREA TOP COVER ======== */
-  #safeAreaCover {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: env(safe-area-inset-top, 0px);
-    background: #04040a;
-    z-index: 200;
-  }
-  body.light-mode #safeAreaCover { background: #f0f0ff; }
 
   /* ======== HAMBURGER MENU ======== */
   .nav-hamburger {
@@ -298,7 +289,7 @@
 
   /* ======== HERO ======== */
   .hero-section {
-    padding-top: calc(130px + env(safe-area-inset-top, 0px));
+    padding-top: 130px;
     display: flex;
     align-items: flex-start;
   }
@@ -1003,8 +994,6 @@
 <div class="orb orb2"></div>
 
 <!-- NAV -->
-<!-- Tapa el notch/safe-area del iPhone con el color del nav -->
-<div id="safeAreaCover"></div>
 <nav>
   <a href="#" class="nav-logo">
     <img src="" class="cover-ref" alt="Ladrando Ideas">
