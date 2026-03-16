@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=7200');
 
@@ -8,7 +8,6 @@ export default async function handler(req, res) {
     });
     const xml = await response.text();
 
-    // Parse items from RSS XML
     const items = [];
     const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match;
@@ -20,7 +19,6 @@ export default async function handler(req, res) {
         return m ? (m[1] || m[2] || '').trim() : '';
       };
       const getLinkHref = () => {
-        // RSS <link> is tricky — it may follow <guid> pattern
         const m = /<link>([^<]+)<\/link>/.exec(item) || /<link\s[^>]*href="([^"]+)"/.exec(item);
         return m ? m[1].trim() : '';
       };
@@ -37,4 +35,4 @@ export default async function handler(req, res) {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
