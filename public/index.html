@@ -1259,7 +1259,7 @@ setInterval(function() {
     var pubDate = item.pubDate ? new Date(item.pubDate) : null;
     var dateStr = pubDate ? pubDate.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'}) : '';
 
-    var embedUrl = item.anchorEmbed || '';
+    var embedUrl = item.embedUrl || item.anchorEmbed || '';
     var shortTitle = title.length > 60 ? title.slice(0, 60).replace(/\s\S*$/, '') + '…' : title;
 
     var badge = index === 0 ? '<div class="ep-num">Más reciente</div>' : '<div class="ep-num">Episodio</div>';
