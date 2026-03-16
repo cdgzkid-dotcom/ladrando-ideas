@@ -452,8 +452,10 @@ nav {
 }
 .ep-back {
   display: none;
-  align-items: center; justify-content: center;
-  gap: 14px;
+  align-items: flex-start; justify-content: flex-start;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
 }
 .ep-card.flipped .ep-front { display: none; }
 .ep-card.flipped .ep-back  { display: flex; }
@@ -1257,9 +1259,8 @@ setInterval(function() {
     var pubDate = item.pubDate ? new Date(item.pubDate) : null;
     var dateStr = pubDate ? pubDate.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'}) : '';
 
-    var embedUrl = '';
-    var m = link.match(/pod\/show\/([^/]+)\/episodes\/(.+)/);
-    if (m) embedUrl = 'https://anchor.fm/' + m[1] + '/embed/episodes/' + m[2];
+    var embedUrl = item.anchorEmbed || '';
+    var shortTitle = title.length > 60 ? title.slice(0, 60).replace(/\s\S*$/, '') + '…' : title;
 
     var badge = index === 0 ? '<div class="ep-num">Más reciente</div>' : '<div class="ep-num">Episodio</div>';
     var titleClass = index === 0 ? 'ep-title' : 'ep-title ep-title-sm';
@@ -1277,7 +1278,7 @@ setInterval(function() {
       + '<button class="ep-play-btn" onclick="flipCard(this)">▶ &nbsp;Escuchar episodio</button>'
       + '</div>'
       + '<div class="ep-back">'
-      + '<p class="ep-back-title">' + title + '</p>'
+      + '<p class="ep-back-title">' + shortTitle + '</p>'
       + '<div class="ep-back-player">' + playerHtml + '</div>'
       + '<button class="ep-close-btn" onclick="flipCard(this)">✕ &nbsp;Cerrar player</button>'
       + '</div>'
