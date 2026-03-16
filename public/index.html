@@ -1275,17 +1275,15 @@ setInterval(function() {
     var pubDate = item.pubDate ? new Date(item.pubDate) : null;
     var dateStr = pubDate ? pubDate.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'}) : '';
 
-    var audioUrl = item.audioUrl || '';
-    var spotifyLink = item.link || '';
+    var embedUrl = item.embedUrl || '';
     var shortTitle = title.length > 55 ? title.slice(0, 55).replace(/\s\S*$/, '') + '…' : title;
 
     var badge = index === 0 ? '<div class="ep-num">Más reciente</div>' : '<div class="ep-num">Episodio</div>';
     var titleClass = index === 0 ? 'ep-title' : 'ep-title ep-title-sm';
     var featured = index === 0 ? ' ep-card-featured' : '';
-    var playerHtml = audioUrl
-      ? '<audio class="ep-audio" controls preload="none" src="' + audioUrl + '"></audio>'
-        + (spotifyLink ? '<a class="ep-spotify-link" href="' + spotifyLink + '" target="_blank">▶ Abrir en Spotify</a>' : '')
-      : '<p style="color:var(--muted);font-size:14px;">Audio no disponible</p>';
+    var playerHtml = embedUrl
+      ? '<iframe src="' + embedUrl + '" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:6px;display:block;"></iframe>'
+      : '<p style="color:var(--muted);font-size:14px;">Abre en <a href="' + (item.link||'#') + '" target="_blank" style="color:var(--cyan)">Spotify</a></p>';
 
     return '<div class="ep-card' + featured + '">'
       + '<div class="ep-front">'
