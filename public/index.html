@@ -1147,14 +1147,16 @@ body.light .toggle-thumb { transform: translateX(18px); }
       <span class="neon-orange">QUE DECIRNOS?</span>
     </h2>
     <p class="newsletter-sub">Escríbenos — preguntas, sugerencias, quieres ser invitado, o solo quieres saludar.</p>
-    <form class="contact-form" id="contactForm" action="https://formspree.io/cdgzkid@gmail.com" method="POST">
+    <form class="contact-form" id="contactForm" action="https://formsubmit.co/cdgzkid@gmail.com" method="POST">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://ladrandoideas.com/#contacto">
+      <input type="hidden" name="_subject" value="Nuevo mensaje — Ladrando Ideas">
       <div class="contact-row">
         <input type="text" name="nombre" class="cf-input" placeholder="Tu nombre" required>
         <input type="email" name="email" class="cf-input" placeholder="Tu correo" required>
       </div>
       <textarea name="mensaje" class="cf-textarea" placeholder="Tu mensaje..." required></textarea>
       <button type="submit" class="cf-submit">Enviar mensaje →</button>
-      <p class="cf-success" id="cfSuccess">✓ Mensaje enviado, te respondemos pronto.</p>
     </form>
   </div>
 </section>
@@ -1210,24 +1212,6 @@ function flipCard(btn) {
   card.classList.toggle('flipped');
 }
 
-// ── Contact form ──
-var contactForm = document.getElementById('contactForm');
-if (contactForm) {
-  contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var data = new FormData(contactForm);
-    fetch(contactForm.action, {
-      method: 'POST', body: data,
-      headers: { 'Accept': 'application/json' }
-    }).then(function(r) {
-      if (r.ok) {
-        contactForm.reset();
-        document.getElementById('cfSuccess').style.display = 'block';
-      }
-    });
-  });
-}
-
 // ── Theme logic ──
 var manualOverride = false;
 
@@ -1257,11 +1241,8 @@ setInterval(function() {
   if (!manualOverride) applyTheme(isDay());
 }, 60000);
 
-// ── Episodios dinámicos desde RSS ──
+// ── Episodios dinámicos desde /api/episodes ──
 (function() {
-  var RSS = 'https://anchor.fm/s/f0d741b4/podcast/rss';
-  var PROXY = 'https://corsproxy.io/?' + encodeURIComponent(RSS);
-
   function stripHtml(html) {
     var d = document.createElement('div');
     d.innerHTML = html;
@@ -1269,15 +1250,13 @@ setInterval(function() {
   }
 
   function buildCard(item, index) {
-    var title = item.querySelector('title') ? item.querySelector('title').textContent.trim() : '';
-    var desc = stripHtml(item.querySelector('description') ? item.querySelector('description').textContent : '');
+    var title = item.title || '';
+    var desc = stripHtml(item.description || '');
     var excerpt = desc.length > 180 ? desc.slice(0, 180).replace(/\s\S*$/, '') + '…' : desc;
-    var linkEl = item.getElementsByTagName('link')[1] || item.querySelector('link');
-    var link = linkEl ? (linkEl.textContent || linkEl.getAttribute('href') || '').trim() : '';
-    var pubDate = item.querySelector('pubDate') ? new Date(item.querySelector('pubDate').textContent) : null;
+    var link = item.link || '';
+    var pubDate = item.pubDate ? new Date(item.pubDate) : null;
     var dateStr = pubDate ? pubDate.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'}) : '';
 
-    // Build Anchor embed URL from podcasters.spotify.com link
     var embedUrl = '';
     var m = link.match(/pod\/show\/([^/]+)\/episodes\/(.+)/);
     if (m) embedUrl = 'https://anchor.fm/' + m[1] + '/embed/episodes/' + m[2];
@@ -1305,16 +1284,14 @@ setInterval(function() {
       + '</div>';
   }
 
-  fetch(PROXY)
-    .then(function(r) { return r.text(); })
-    .then(function(text) {
-      var xml = new DOMParser().parseFromString(text, 'text/xml');
-      var items = Array.from(xml.querySelectorAll('item')).slice(0, 3);
-      if (!items.length) return;
+  fetch('/api/episodes')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.items || !data.items.length) return;
       var grid = document.getElementById('ep-grid');
-      if (grid) grid.innerHTML = items.map(buildCard).join('');
+      if (grid) grid.innerHTML = data.items.map(buildCard).join('');
     })
-    .catch(function(e) { console.warn('RSS load failed:', e); });
+    .catch(function(e) { console.warn('Episodes load failed:', e); });
 })();
 </script>
 </body>
