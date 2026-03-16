@@ -484,23 +484,57 @@ nav {
 
 /* back side */
 .ep-back-player { width: 100%; }
-.ep-audio {
+
+/* ── Custom player ── */
+.cp {
+  display: flex; align-items: center; gap: 12px;
+  background: #111827;
+  border-radius: 10px;
+  padding: 12px 14px;
   width: 100%;
-  height: 40px;
-  border-radius: 6px;
-  outline: none;
-  accent-color: var(--cyan);
+}
+.cp-cover {
+  width: 52px; height: 52px; border-radius: 6px;
+  object-fit: cover; flex-shrink: 0;
   background: var(--bg4);
-  filter: invert(0);
 }
-.ep-spotify-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--cond); font-size: 12px; font-weight: 600;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: #1DB954; text-decoration: none; margin-top: 6px;
-  opacity: 0.8; transition: opacity .2s;
+.cp-info { flex: 1; min-width: 0; }
+.cp-title {
+  font-family: var(--cond); font-size: 13px; font-weight: 600;
+  color: #fff; letter-spacing: 0.02em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: 8px;
 }
-.ep-spotify-link:hover { opacity: 1; }
+.cp-controls { display: flex; align-items: center; gap: 8px; }
+.cp-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--cyan); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: transform .15s, background .15s;
+}
+.cp-btn:hover { background: #1FD4FF; transform: scale(1.08); }
+.cp-btn svg { width: 14px; height: 14px; fill: #000; }
+.cp-progress { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.cp-bar-wrap {
+  width: 100%; height: 4px; background: rgba(255,255,255,0.15);
+  border-radius: 2px; cursor: pointer; position: relative;
+}
+.cp-bar {
+  height: 100%; background: var(--cyan); border-radius: 2px;
+  width: 0%; pointer-events: none;
+}
+.cp-times {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: rgba(255,255,255,0.35);
+  font-family: var(--sans);
+}
+.cp-spotify {
+  display: flex; align-items: center;
+  font-size: 10px; color: #1DB954; text-decoration: none;
+  font-family: var(--cond); font-weight: 700; letter-spacing: 0.06em;
+  opacity: 0.7; transition: opacity .2s; flex-shrink: 0;
+}
+.cp-spotify:hover { opacity: 1; }
 
 .ep-back-title {
   font-family: var(--cond);
@@ -1230,6 +1264,57 @@ function flipCard(btn) {
   card.classList.toggle('flipped');
 }
 
+// ── Custom audio player ──
+var cpAudios = {};
+function fmt(s) {
+  var m = Math.floor(s/60), sec = Math.floor(s%60);
+  return m + ':' + (sec<10?'0':'') + sec;
+}
+function cpToggle(pid, src) {
+  var el = document.getElementById(pid);
+  if (!el) return;
+  if (!cpAudios[pid]) {
+    var a = new Audio(src);
+    cpAudios[pid] = a;
+    a.addEventListener('timeupdate', function() {
+      var bar = el.querySelector('.cp-bar');
+      var cur = el.querySelector('.cp-cur');
+      if (bar && a.duration) bar.style.width = (a.currentTime/a.duration*100) + '%';
+      if (cur) cur.textContent = fmt(a.currentTime);
+    });
+    a.addEventListener('loadedmetadata', function() {
+      var dur = el.querySelector('.cp-dur');
+      if (dur) dur.textContent = fmt(a.duration);
+    });
+    a.addEventListener('ended', function() {
+      var btn = el.querySelector('.cp-btn svg');
+      if (btn) btn.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    });
+  }
+  var audio = cpAudios[pid];
+  var btnSvg = el.querySelector('.cp-btn svg');
+  if (audio.paused) {
+    // Pause all others
+    Object.keys(cpAudios).forEach(function(k) { if (k!==pid) { cpAudios[k].pause(); var o=document.getElementById(k); if(o){var s=o.querySelector('.cp-btn svg'); if(s) s.innerHTML='<path d="M8 5v14l11-7z"/>'; }}});
+    audio.play();
+    if (btnSvg) btnSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+  } else {
+    audio.pause();
+    if (btnSvg) btnSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
+  }
+}
+function cpSeek(e, pid) {
+  var el = document.getElementById(pid);
+  var audio = cpAudios[pid];
+  if (!el || !audio || !audio.duration) return;
+  var wrap = el.querySelector('.cp-bar-wrap');
+  var rect = wrap.getBoundingClientRect();
+  audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+}
+function cpStop(pid) {
+  if (cpAudios[pid]) { cpAudios[pid].pause(); cpAudios[pid].currentTime = 0; }
+}
+
 // ── Theme logic ──
 var manualOverride = false;
 
@@ -1275,15 +1360,33 @@ setInterval(function() {
     var pubDate = item.pubDate ? new Date(item.pubDate) : null;
     var dateStr = pubDate ? pubDate.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'}) : '';
 
-    var embedUrl = item.embedUrl || '';
-    var shortTitle = title.length > 55 ? title.slice(0, 55).replace(/\s\S*$/, '') + '…' : title;
+    var audio = item.audioUrl || '';
+    var img   = item.imageUrl || '';
+    var sLink = item.link || '#';
+    var pid   = 'cp-' + index;
+    var shortTitle = title.length > 48 ? title.slice(0, 48).replace(/\s\S*$/, '') + '…' : title;
 
     var badge = index === 0 ? '<div class="ep-num">Más reciente</div>' : '<div class="ep-num">Episodio</div>';
     var titleClass = index === 0 ? 'ep-title' : 'ep-title ep-title-sm';
     var featured = index === 0 ? ' ep-card-featured' : '';
-    var playerHtml = embedUrl
-      ? '<iframe src="' + embedUrl + '" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:6px;display:block;"></iframe>'
-      : '<p style="color:var(--muted);font-size:14px;">Abre en <a href="' + (item.link||'#') + '" target="_blank" style="color:var(--cyan)">Spotify</a></p>';
+
+    var playerHtml = '<div class="cp" id="' + pid + '">'
+      + (img ? '<img class="cp-cover" src="' + img + '" alt="">' : '')
+      + '<div class="cp-info">'
+      + '<div class="cp-title">' + shortTitle + '</div>'
+      + '<div class="cp-controls">'
+      + '<button class="cp-btn" onclick="cpToggle(\'' + pid + '\',\'' + audio + '\')">'
+      + '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
+      + '</button>'
+      + '<div class="cp-progress">'
+      + '<div class="cp-bar-wrap" onclick="cpSeek(event,\'' + pid + '\')">'
+      + '<div class="cp-bar"></div></div>'
+      + '<div class="cp-times"><span class="cp-cur">0:00</span><span class="cp-dur"></span></div>'
+      + '</div>'
+      + '<a class="cp-spotify" href="' + sLink + '" target="_blank" title="Abrir en Spotify">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115.294.18.386.563.207.857zm1.223-2.722a.779.779 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 01-.973-.519.779.779 0 01.519-.972c3.632-1.102 8.147-.568 11.234 1.328a.779.779 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.935.935 0 11-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 01-.955 1.609z"/></svg>'
+      + '</a>'
+      + '</div></div></div>';
 
     return '<div class="ep-card' + featured + '">'
       + '<div class="ep-front">'
@@ -1294,9 +1397,8 @@ setInterval(function() {
       + '<button class="ep-play-btn" onclick="flipCard(this)">▶ &nbsp;Escuchar episodio</button>'
       + '</div>'
       + '<div class="ep-back">'
-      + '<p class="ep-back-title">' + shortTitle + '</p>'
       + '<div class="ep-back-player">' + playerHtml + '</div>'
-      + '<button class="ep-close-btn" onclick="flipCard(this)">✕ &nbsp;Cerrar player</button>'
+      + '<button class="ep-close-btn" onclick="cpStop(\'' + pid + '\');flipCard(this)">✕ &nbsp;Cerrar player</button>'
       + '</div>'
       + '</div>';
   }
