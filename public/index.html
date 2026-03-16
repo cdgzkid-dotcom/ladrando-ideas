@@ -559,6 +559,14 @@ nav {
   transition: border-color .2s, color .2s;
 }
 .ep-close-btn:hover { border-color: rgba(216,232,248,0.3); color: var(--text); }
+.cp-desc {
+  font-size: 11px; line-height: 1.5;
+  color: rgba(255,255,255,0.45);
+  margin-top: 8px;
+  font-family: var(--sans);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 /* ══════════════════════════════
    SOBRE
@@ -1374,6 +1382,7 @@ setInterval(function() {
       + (img ? '<img class="cp-cover" src="' + img + '" alt="">' : '')
       + '<div class="cp-info">'
       + '<div class="cp-title">' + shortTitle + '</div>'
+      + (excerpt ? '<div class="cp-desc">' + excerpt + '</div>' : '')
       + '<div class="cp-controls">'
       + '<button class="cp-btn" onclick="cpToggle(\'' + pid + '\',\'' + audio + '\')">'
       + '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
