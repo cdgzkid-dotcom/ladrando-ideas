@@ -702,37 +702,46 @@ nav {
   color: var(--muted); margin-bottom: 36px;
 }
 
-.email-form { display: flex; max-width: 460px; }
+.contact-form { display: flex; flex-direction: column; gap: 12px; max-width: 520px; }
 
-.email-input {
-  flex: 1;
+.contact-row { display: flex; gap: 12px; }
+.contact-row .cf-input { flex: 1; }
+
+.cf-input, .cf-textarea {
+  width: 100%;
   padding: 13px 16px;
   font-family: var(--sans); font-size: 15px;
   background: rgba(0,191,255,0.05);
-  border: 1px solid rgba(0,191,255,0.2); border-right: none;
-  border-radius: 3px 0 0 3px;
+  border: 1px solid rgba(0,191,255,0.2);
+  border-radius: 3px;
   color: var(--text); outline: none;
   transition: border-color .2s, box-shadow .2s;
 }
-.email-input::placeholder { color: rgba(216,232,248,0.3); }
-.email-input:focus {
+.cf-input::placeholder, .cf-textarea::placeholder { color: rgba(216,232,248,0.3); }
+.cf-input:focus, .cf-textarea:focus {
   border-color: var(--cyan);
   box-shadow: 0 0 0 2px rgba(0,191,255,0.1);
 }
+.cf-textarea { resize: vertical; min-height: 120px; }
 
-.email-submit {
-  padding: 13px 24px;
+.cf-submit {
+  align-self: flex-start;
+  padding: 13px 32px;
   background: var(--cyan); color: var(--bg);
   font-family: var(--cond); font-size: 14px; font-weight: 700;
   letter-spacing: 0.1em; text-transform: uppercase;
-  border: none; border-radius: 0 3px 3px 0;
+  border: none; border-radius: 3px;
   cursor: pointer;
   transition: background .2s, box-shadow .2s;
-  white-space: nowrap;
 }
-.email-submit:hover {
+.cf-submit:hover {
   background: #1FD4FF;
   box-shadow: 0 0 16px rgba(0,191,255,0.3);
+}
+.cf-success {
+  display: none; color: var(--cyan);
+  font-family: var(--cond); font-size: 15px; letter-spacing: 0.05em;
+  margin-top: 8px;
 }
 
 /* ══════════════════════════════
@@ -1202,21 +1211,26 @@ body.light .toggle-thumb { transform: translateX(18px); }
   </div>
 </section>
 
-<!-- ════════ NEWSLETTER ════════ -->
+<!-- ════════ CONTACTO ════════ -->
 <section class="newsletter">
   <div class="newsletter-inner">
     <div class="section-kicker" style="color:var(--orange);">
       <span style="display:inline-block;width:20px;height:1.5px;background:var(--orange);box-shadow:0 0 4px var(--orange);vertical-align:middle;margin-right:10px;"></span>
-      Comunidad
+      Contacto
     </div>
     <h2 class="newsletter-title">
-      <span class="neon-cyan">NO TE PIERDAS</span><br>
-      <span class="neon-orange">NINGÚN LADRIDO</span>
+      <span class="neon-cyan">¿TIENES ALGO</span><br>
+      <span class="neon-orange">QUE DECIRNOS?</span>
     </h2>
-    <p class="newsletter-sub">Cada semana, el nuevo episodio directo a tu correo. Sin spam, sin rollos.</p>
-    <form class="email-form" onsubmit="return false;">
-      <input type="email" class="email-input" placeholder="tu@correo.com">
-      <button class="email-submit">Suscribirme</button>
+    <p class="newsletter-sub">Escríbenos — preguntas, sugerencias, quieres ser invitado, o solo quieres saludar.</p>
+    <form class="contact-form" id="contactForm" action="https://formspree.io/f/FORM_ID" method="POST">
+      <div class="contact-row">
+        <input type="text" name="nombre" class="cf-input" placeholder="Tu nombre" required>
+        <input type="email" name="email" class="cf-input" placeholder="Tu correo" required>
+      </div>
+      <textarea name="mensaje" class="cf-textarea" placeholder="Tu mensaje..." required></textarea>
+      <button type="submit" class="cf-submit">Enviar mensaje →</button>
+      <p class="cf-success" id="cfSuccess">✓ Mensaje enviado, te respondemos pronto.</p>
     </form>
   </div>
 </section>
@@ -1270,6 +1284,24 @@ body.light .toggle-thumb { transform: translateX(18px); }
 function flipCard(btn) {
   var card = btn.closest('.ep-card');
   card.classList.toggle('flipped');
+}
+
+// ── Contact form ──
+var contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var data = new FormData(contactForm);
+    fetch(contactForm.action, {
+      method: 'POST', body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(function(r) {
+      if (r.ok) {
+        contactForm.reset();
+        document.getElementById('cfSuccess').style.display = 'block';
+      }
+    });
+  });
 }
 
 // ── Theme logic ──
