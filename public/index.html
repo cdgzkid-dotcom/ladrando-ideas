@@ -1038,93 +1038,11 @@ body.light .toggle-thumb { transform: translateX(18px); }
     <a href="https://open.spotify.com/show/0So9xpkBJmSJrPwqkKh5Bp?si=36e9cfa699364673" class="see-all">Ver todos →</a>
   </div>
 
-  <div class="ep-grid">
-
-    <!-- Featured EP9 -->
-    <div class="ep-card">
-      <div class="ep-front">
-        <div class="ep-num">T3 · EP. 9 — Más reciente</div>
-        <h3 class="ep-title">Criando Berneses: lo que nadie te dice antes de elegir un gigante</h3>
-        <p class="ep-excerpt">Ethel nos habla sin filtro sobre la realidad de criar Bernese Mountain Dogs en México — las alegrías, los gastos veterinarios, y por qué el temperamento lo es todo.</p>
-        <div class="ep-tags">
-          <span class="ep-tag">Crianza</span>
-          <span class="ep-tag">Razas grandes</span>
-          <span class="ep-tag">Salud</span>
-        </div>
-        <div class="ep-meta">
-          <span>Ethel · Bernese Breeder</span>
-          <span class="ep-dot"></span>
-          <span>~50 min</span>
-        </div>
-        <button class="ep-play-btn" onclick="flipCard(this)">
-          ▶ &nbsp;Escuchar episodio
-        </button>
-        <div class="ep-wm">9</div>
-      </div>
-      <div class="ep-back">
-        <p class="ep-back-title">EP. 9 — Criando Berneses: lo que nadie te dice</p>
-        <div class="ep-back-player">
-          <iframe src="https://open.spotify.com/embed/episode/6SRqS0dwOdgCdUuUO6G148?utm_source=generator&theme=0" height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </div>
-        <button class="ep-close-btn" onclick="flipCard(this)">✕ &nbsp;Cerrar player</button>
-      </div>
-    </div>
-
-    <!-- EP8 -->
-    <!-- EP3 -->
-    <div class="ep-card">
-      <div class="ep-front">
-        <div class="ep-num">T3 · EP. 3</div>
-        <h3 class="ep-title ep-title-sm">Rodolfo Ascencio: cómo el mundo canino te cambia la vida</h3>
-        <p class="ep-excerpt">Rodolfo, co-host del podcast, habla de su historia con los perros — cómo empezó, qué aprendió y por qué decidió hablar de esto públicamente.</p>
-        <div class="ep-meta">
-          <span>Rodolfo Ascencio</span>
-          <span class="ep-dot"></span>
-          <span>~50 min</span>
-        </div>
-        <button class="ep-play-btn" onclick="flipCard(this)">
-          ▶ &nbsp;Escuchar episodio
-        </button>
-        <div class="ep-wm">3</div>
-      </div>
-      <div class="ep-back">
-        <p class="ep-back-title">EP. 3 — Rodolfo Ascencio: el mundo canino</p>
-        <div class="ep-back-player">
-          <iframe src="https://open.spotify.com/embed/episode/6mCgmCWXXq9qbssPU26cxW?utm_source=generator&theme=0" height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </div>
-        <button class="ep-close-btn" onclick="flipCard(this)">✕ &nbsp;Cerrar player</button>
-      </div>
-    </div>
-
-    <!-- EP7 -->
-    <div class="ep-card">
-      <div class="ep-front">
-        <div class="ep-num">T3 · EP. 7</div>
-        <h3 class="ep-title ep-title-sm">Grooming como negocio: Oswaldo Maziee & Eli sobre estética canina</h3>
-        <p class="ep-excerpt">Dos estilistas caninos emprendedores hablan de cómo construyeron su marca desde cero.</p>
-        <div class="ep-tags">
-          <span class="ep-tag">Estética</span>
-          <span class="ep-tag">Emprendimiento</span>
-        </div>
-        <div class="ep-meta">
-          <span>Oswaldo Maziee & Eli</span>
-          <span class="ep-dot"></span>
-          <span>~50 min</span>
-        </div>
-        <button class="ep-play-btn" onclick="flipCard(this)">
-          ▶ &nbsp;Escuchar episodio
-        </button>
-        <div class="ep-wm">7</div>
-      </div>
-      <div class="ep-back">
-        <p class="ep-back-title">EP. 7 — Grooming como negocio</p>
-        <div class="ep-back-player">
-          <iframe src="https://open.spotify.com/embed/episode/3nl6Fke9Buve0c0bpbshe9?utm_source=generator&theme=0" height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </div>
-        <button class="ep-close-btn" onclick="flipCard(this)">✕ &nbsp;Cerrar player</button>
-      </div>
-    </div>
-
+  <div class="ep-grid" id="ep-grid">
+    <!-- Los episodios se cargan automáticamente desde el RSS -->
+    <div class="ep-card ep-skeleton"><div class="ep-front"><div class="ep-num">Cargando...</div><h3 class="ep-title" style="background:rgba(0,191,255,0.08);color:transparent;border-radius:4px;">░░░░░░░░░░░░░░░░░░░░░░░░░░░░</h3></div></div>
+    <div class="ep-card ep-skeleton"><div class="ep-front"><div class="ep-num">Cargando...</div><h3 class="ep-title ep-title-sm" style="background:rgba(0,191,255,0.08);color:transparent;border-radius:4px;">░░░░░░░░░░░░░░░░</h3></div></div>
+    <div class="ep-card ep-skeleton"><div class="ep-front"><div class="ep-num">Cargando...</div><h3 class="ep-title ep-title-sm" style="background:rgba(0,191,255,0.08);color:transparent;border-radius:4px;">░░░░░░░░░░░░░░░░</h3></div></div>
   </div>
 </section>
 
@@ -1338,6 +1256,66 @@ applyTheme(isDay());
 setInterval(function() {
   if (!manualOverride) applyTheme(isDay());
 }, 60000);
+
+// ── Episodios dinámicos desde RSS ──
+(function() {
+  var RSS = 'https://anchor.fm/s/f0d741b4/podcast/rss';
+  var PROXY = 'https://corsproxy.io/?' + encodeURIComponent(RSS);
+
+  function stripHtml(html) {
+    var d = document.createElement('div');
+    d.innerHTML = html;
+    return (d.textContent || d.innerText || '').trim();
+  }
+
+  function buildCard(item, index) {
+    var title = item.querySelector('title') ? item.querySelector('title').textContent.trim() : '';
+    var desc = stripHtml(item.querySelector('description') ? item.querySelector('description').textContent : '');
+    var excerpt = desc.length > 180 ? desc.slice(0, 180).replace(/\s\S*$/, '') + '…' : desc;
+    var linkEl = item.getElementsByTagName('link')[1] || item.querySelector('link');
+    var link = linkEl ? (linkEl.textContent || linkEl.getAttribute('href') || '').trim() : '';
+    var pubDate = item.querySelector('pubDate') ? new Date(item.querySelector('pubDate').textContent) : null;
+    var dateStr = pubDate ? pubDate.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'}) : '';
+
+    // Build Anchor embed URL from podcasters.spotify.com link
+    var embedUrl = '';
+    var m = link.match(/pod\/show\/([^/]+)\/episodes\/(.+)/);
+    if (m) embedUrl = 'https://anchor.fm/' + m[1] + '/embed/episodes/' + m[2];
+
+    var badge = index === 0 ? '<div class="ep-num">Más reciente</div>' : '<div class="ep-num">Episodio</div>';
+    var titleClass = index === 0 ? 'ep-title' : 'ep-title ep-title-sm';
+    var featured = index === 0 ? ' ep-card-featured' : '';
+    var playerHtml = embedUrl
+      ? '<iframe src="' + embedUrl + '" height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>'
+      : '<p style="color:var(--muted);font-size:14px;">Player no disponible</p>';
+
+    return '<div class="ep-card' + featured + '">'
+      + '<div class="ep-front">'
+      + badge
+      + '<h3 class="' + titleClass + '">' + title + '</h3>'
+      + '<p class="ep-excerpt">' + excerpt + '</p>'
+      + '<div class="ep-meta"><span>' + dateStr + '</span></div>'
+      + '<button class="ep-play-btn" onclick="flipCard(this)">▶ &nbsp;Escuchar episodio</button>'
+      + '</div>'
+      + '<div class="ep-back">'
+      + '<p class="ep-back-title">' + title + '</p>'
+      + '<div class="ep-back-player">' + playerHtml + '</div>'
+      + '<button class="ep-close-btn" onclick="flipCard(this)">✕ &nbsp;Cerrar player</button>'
+      + '</div>'
+      + '</div>';
+  }
+
+  fetch(PROXY)
+    .then(function(r) { return r.text(); })
+    .then(function(text) {
+      var xml = new DOMParser().parseFromString(text, 'text/xml');
+      var items = Array.from(xml.querySelectorAll('item')).slice(0, 3);
+      if (!items.length) return;
+      var grid = document.getElementById('ep-grid');
+      if (grid) grid.innerHTML = items.map(buildCard).join('');
+    })
+    .catch(function(e) { console.warn('RSS load failed:', e); });
+})();
 </script>
 </body>
 </html>
