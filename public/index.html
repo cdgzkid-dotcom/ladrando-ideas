@@ -770,7 +770,9 @@ nav {
   font-size: clamp(40px, 6vw, 64px);
   letter-spacing: 0.05em;
   line-height: 0.9;
-  margin: 10px 0 16px;
+  margin: 10px auto 16px;
+  text-align: center;
+  width: 100%;
 }
 
 .neon-cyan  { color: var(--cyan); }
@@ -779,9 +781,10 @@ nav {
 .newsletter-sub {
   font-size: 16px; line-height: 1.65;
   color: var(--muted); margin-bottom: 36px;
+  text-align: center; width: 100%; margin-left: auto; margin-right: auto;
 }
 
-.contact-form { display: flex; flex-direction: column; gap: 12px; max-width: 520px; }
+.contact-form { display: flex; flex-direction: column; gap: 12px; max-width: 520px; margin: 0 auto; }
 
 .contact-row { display: flex; gap: 12px; }
 .contact-row .cf-input { flex: 1; }
