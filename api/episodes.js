@@ -1,6 +1,6 @@
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=7200');
+  res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
 
   try {
     const rssRes = await fetch('https://anchor.fm/s/f0d741b4/podcast/rss', {
