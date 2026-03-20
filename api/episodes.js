@@ -8,6 +8,13 @@ module.exports = async function handler(req, res) {
     });
     const xml = await rssRes.text();
 
+    // Extract season from channel-level itunes:season or first episode title (e.g. "T3 E8" → 3)
+    let season = null;
+    const channelSeasonMatch = /<itunes:season>(\d+)<\/itunes:season>/.exec(xml);
+    if (channelSeasonMatch) {
+      season = parseInt(channelSeasonMatch[1], 10);
+    }
+
     const items = [];
     const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match;
@@ -23,8 +30,16 @@ module.exports = async function handler(req, res) {
       const imageMatch = /<itunes:image\s[^>]*href="([^"]+)"/.exec(item);
       const durationMatch = /<itunes:duration>([^<]+)<\/itunes:duration>/.exec(item);
 
+      const title = get('title');
+
+      // If no channel-level season, extract from first episode title (T3 E8 → 3)
+      if (season === null && items.length === 0) {
+        const titleSeasonMatch = /\bT(\d+)\s*E\d+/i.exec(title);
+        if (titleSeasonMatch) season = parseInt(titleSeasonMatch[1], 10);
+      }
+
       items.push({
-        title: get('title'),
+        title,
         description: get('description'),
         link: linkMatch ? linkMatch[1].trim() : '',
         pubDate: get('pubDate'),
@@ -34,7 +49,7 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    res.status(200).json({ items });
+    res.status(200).json({ items, season });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

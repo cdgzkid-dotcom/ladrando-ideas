@@ -1190,6 +1190,9 @@ body.light .toggle-thumb { transform: translateX(18px); }
           <a href="https://podcasts.apple.com/mx/podcast/ladrando-ideas-podcast-de-perros/id1728309744?l=en-GB" class="plat-btn" style="padding:9px 16px;font-size:13px;">
             <span class="plat-icon">🎙</span> Apple Podcasts
           </a>
+          <a href="https://music.amazon.com.mx/podcasts/6938af8b-ecf5-4749-8394-439980b32817/ladrando-ideas-podcast-de-perros" class="plat-btn" style="padding:9px 16px;font-size:13px;border-color:rgba(255,153,0,0.3);color:#FF9900;" target="_blank" rel="noopener">
+            <span class="plat-icon">🎵</span> Amazon Music
+          </a>
           <a href="https://www.instagram.com/ladrandoideas/?__pwa=1" class="plat-btn" style="padding:9px 16px;font-size:13px;border-color:rgba(212,49,140,0.3);color:var(--orange);">
             <span class="plat-icon">📸</span> Instagram
           </a>
@@ -1293,9 +1296,9 @@ body.light .toggle-thumb { transform: translateX(18px); }
     <div>
       <div class="footer-h">Escúchanos</div>
       <ul class="footer-list">
-        <li><a href="#">Spotify</a></li>
-        <li><a href="#">Apple Podcasts</a></li>
-        <li><a href="#">Instagram</a></li>
+        <li><a href="https://open.spotify.com/show/0So9xpkBJmSJrPwqkKh5Bp?si=36e9cfa699364673" target="_blank" rel="noopener">Spotify</a></li>
+        <li><a href="https://podcasts.apple.com/mx/podcast/ladrando-ideas-podcast-de-perros/id1728309744" target="_blank" rel="noopener">Apple Podcasts</a></li>
+        <li><a href="https://music.amazon.com.mx/podcasts/6938af8b-ecf5-4749-8394-439980b32817/ladrando-ideas-podcast-de-perros" target="_blank" rel="noopener">Amazon Music</a></li>
       </ul>
     </div>
   </div>
@@ -1485,6 +1488,10 @@ setInterval(function() {
       if (!data.items || !data.items.length) return;
       var grid = document.getElementById('ep-grid');
       if (grid) grid.innerHTML = data.items.map(buildCard).join('');
+      if (data.season) {
+        var badge = document.querySelector('.hero-cover-badge');
+        if (badge) badge.innerHTML = '<span class="badge-dot"></span> Temporada ' + data.season + ' en curso';
+      }
     })
     .catch(function(e) { console.warn('Episodes load failed:', e); });
 })();
