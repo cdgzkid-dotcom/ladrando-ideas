@@ -25,6 +25,11 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var h=new Date().getHours();if(h>=6&&h<20)document.documentElement.classList.add('light');})()`,
+          }}
+        />
       </head>
       <body className="antialiased">{children}</body>
     </html>
