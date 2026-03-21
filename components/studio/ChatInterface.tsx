@@ -7,10 +7,21 @@ type Message = {
   content: string;
 };
 
+function extractScript(text: string): string | null {
+  // Only extract if it has script structure
+  if (!text.includes("## BLOQUE") && !text.includes("## CIERRE")) return null;
+  // Strip everything before the first markdown # header
+  const match = text.match(/^(# .+)/m);
+  if (match) {
+    return text.slice(text.indexOf(match[0])).trim();
+  }
+  return text.trim();
+}
+
 export default function ChatInterface({
-  onScriptReady,
+  onScriptGenerated,
 }: {
-  onScriptReady: (content: string, messages: Message[]) => void;
+  onScriptGenerated: (content: string) => void;
 }) {
   const INITIAL_MESSAGE = "Hola, vamos a preparar el guion para Ladrando Ideas. ¿Quien es el invitado de este episodio?";
 
@@ -20,7 +31,6 @@ export default function ChatInterface({
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -30,7 +40,6 @@ export default function ChatInterface({
     setIsStreaming(true);
     let assistantText = "";
 
-    // Add placeholder assistant message
     setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
     try {
@@ -95,16 +104,10 @@ export default function ChatInterface({
 
     setIsStreaming(false);
 
-    // Check if the response contains a script (has markdown headers like ## BLOQUE)
-    if (
-      assistantText.includes("## BLOQUE") ||
-      assistantText.includes("## CIERRE")
-    ) {
-      const allMessages = [
-        ...currentMessages,
-        { role: "assistant" as const, content: assistantText },
-      ];
-      onScriptReady(assistantText, allMessages);
+    // Extract clean script content (strip preamble like "Perfecto, generando...")
+    const script = extractScript(assistantText);
+    if (script) {
+      onScriptGenerated(script);
     }
   }
 
@@ -159,7 +162,6 @@ export default function ChatInterface({
       <div className="border-t border-border p-4">
         <div className="flex gap-3 items-end">
           <textarea
-            ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
