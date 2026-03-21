@@ -40,7 +40,11 @@ export default function ScriptList() {
   return (
     <div className="space-y-3">
       {scripts.map((script) => (
-        <ScriptCard key={script.id} script={script} />
+        <ScriptCard
+          key={script.id}
+          script={script}
+          onDeleted={() => setScripts((prev) => prev.filter((s) => s.id !== script.id))}
+        />
       ))}
     </div>
   );

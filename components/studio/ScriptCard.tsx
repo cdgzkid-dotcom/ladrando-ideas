@@ -37,8 +37,15 @@ function formatDate(dateStr: string) {
   });
 }
 
-export default function ScriptCard({ script }: { script: Script }) {
+export default function ScriptCard({
+  script,
+  onDeleted,
+}: {
+  script: Script;
+  onDeleted?: () => void;
+}) {
   const [copied, setCopied] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const status = statusConfig[script.status] || statusConfig.draft;
 
   const shareUrl =
@@ -50,6 +57,17 @@ export default function ScriptCard({ script }: { script: Script }) {
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  }
+
+  async function handleDelete() {
+    if (!confirm(`Borrar el guion de ${script.guest_name}?`)) return;
+    setDeleting(true);
+    try {
+      await fetch(`/api/scripts/${script.id}`, { method: "DELETE" });
+      onDeleted?.();
+    } catch {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -90,6 +108,13 @@ export default function ScriptCard({ script }: { script: Script }) {
             className="bg-bg-input border border-border rounded-lg px-3 py-2 text-xs font-medium text-text-pri hover:border-primary-border transition-colors"
           >
             {copied ? "Copiado" : "Copiar link"}
+          </button>
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="bg-bg-input border border-red-500/20 rounded-lg px-3 py-2 text-xs font-medium text-red-400 hover:border-red-500/50 hover:bg-red-500/10 transition-colors disabled:opacity-40"
+          >
+            {deleting ? "..." : "Borrar"}
           </button>
         </div>
       </div>
