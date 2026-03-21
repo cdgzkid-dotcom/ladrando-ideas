@@ -74,25 +74,27 @@ export default function ScriptCard({
     <div className="bg-bg-card border border-border rounded-xl p-4 hover:border-primary-border transition-colors">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-text-sec text-xs font-medium">
-              {script.season_number ? `T${script.season_number} · ` : ""}
-              {script.episode_number
-                ? `Ep. ${script.episode_number}`
-                : "Sin ep."}
+          {/* Invitado — grande y resaltado */}
+          <h3 className="text-text-pri font-bold text-base truncate">
+            {script.guest_name}
+          </h3>
+
+          {/* Temporada · Episodio — color primario */}
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-primary text-sm font-semibold">
+              {script.season_number ? `T${script.season_number}` : ""}
+              {script.season_number && script.episode_number ? " · " : ""}
+              {script.episode_number ? `Ep. ${script.episode_number}` : "Sin ep."}
             </span>
-            <span className={`text-xs px-2 py-0.5 rounded-full ${status.bg} ${status.color}`}>
+            <span className={`text-[11px] px-2 py-0.5 rounded-full ${status.bg} ${status.color}`}>
               {status.label}
             </span>
           </div>
-          <h3 className="text-text-pri font-semibold text-sm truncate">
-            {script.guest_name}
-          </h3>
-          <p className="text-text-sec text-xs truncate">
+
+          {/* Perfil + fecha */}
+          <p className="text-text-sec text-xs truncate mt-1">
             {script.guest_profile || "Sin perfil"}
-          </p>
-          <p className="text-text-ter text-xs mt-1">
-            {formatDate(script.created_at)}
+            <span className="text-text-ter"> · {formatDate(script.created_at)}</span>
           </p>
         </div>
 
