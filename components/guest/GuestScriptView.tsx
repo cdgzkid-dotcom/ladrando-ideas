@@ -9,7 +9,7 @@ import type { Script, Comment } from "@/lib/supabase";
 type RecentEpisode = Pick<
   Script,
   "id" | "title" | "guest_name" | "episode_number" | "season_number" | "status" | "share_token"
->;
+> & { created_at?: string };
 
 function splitIntoBlocks(content: string): { section: string; content: string }[] {
   const parts = content.split(/(?=^## )/m);
@@ -18,15 +18,13 @@ function splitIntoBlocks(content: string): { section: string; content: string }[
   for (const part of parts) {
     const trimmed = part.trim();
     if (!trimmed) continue;
+    // Skip parts that don't start with ## (intro/header content)
+    if (!trimmed.startsWith("## ")) continue;
 
     const headerMatch = trimmed.match(/^## (.+?)(?:\n|$)/);
-    const section = headerMatch ? headerMatch[1].trim() : "Introduccion";
+    const section = headerMatch ? headerMatch[1].trim() : "Bloque";
 
     blocks.push({ section, content: trimmed });
-  }
-
-  if (blocks.length === 0) {
-    return [{ section: "Guion", content }];
   }
 
   return blocks;
@@ -44,9 +42,12 @@ export default function GuestScriptView({
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [status, setStatus] = useState(script.status);
 
-  const blocks = splitIntoBlocks(script.content);
+  // Only use script.content — nothing else
+  const content = script.content;
+  const blocks = splitIntoBlocks(content);
 
-  const introMatch = script.content.match(/^([\s\S]*?)(?=^## )/m);
+  // Extract header/intro (everything before the first ## block)
+  const introMatch = content.match(/^([\s\S]*?)(?=^## )/m);
   const introContent = introMatch ? introMatch[1].trim() : "";
 
   const refreshComments = useCallback(async () => {
@@ -62,28 +63,10 @@ export default function GuestScriptView({
   return (
     <div className="min-h-screen bg-bg flex flex-col lg:flex-row">
       {/* Sidebar */}
-      <Sidebar
-        recentEpisodes={recentEpisodes}
-        currentToken={script.share_token}
-      />
+      <Sidebar recentEpisodes={recentEpisodes} />
 
       {/* Main content */}
       <div className="flex-1 min-w-0">
-        {/* Header */}
-        <header className="border-b border-border bg-bg-alt lg:hidden">
-          <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3">
-            <span className="font-display text-lg font-bold text-primary tracking-tight">
-              LADRANDO IDEAS
-            </span>
-            <span className="text-text-ter text-sm">
-              Guion
-              {script.episode_number
-                ? ` — Episodio ${script.episode_number}`
-                : ""}
-            </span>
-          </div>
-        </header>
-
         <main className="max-w-3xl mx-auto px-4 py-8 space-y-6">
           {/* Welcome message */}
           <div className="bg-primary-subtle border border-primary-border rounded-xl p-5">
@@ -96,22 +79,18 @@ export default function GuestScriptView({
             </p>
           </div>
 
-          {/* Intro content (before blocks) */}
+          {/* Intro/header content (title, invitado, hosts, etc.) */}
           {introContent && (
-            <div className="bg-bg-card border border-border rounded-xl p-5 sm:p-6">
-              <div className="prose-script text-text-pri">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: introContent
-                      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                      .replace(/\n/g, "<br />"),
-                  }}
-                />
-              </div>
-            </div>
+            <BlockCard
+              section="Introduccion"
+              content={introContent}
+              scriptId={script.id}
+              comments={getCommentsForSection("Introduccion")}
+              onCommentAdded={refreshComments}
+            />
           )}
 
-          {/* Blocks */}
+          {/* Blocks — rendered once */}
           {blocks.map((block, i) => (
             <BlockCard
               key={i}

@@ -29,7 +29,7 @@ export async function GET(
   // Recent episodes for sidebar
   const { data: recentEpisodes } = await getSupabase()
     .from("scripts")
-    .select("id, title, guest_name, episode_number, season_number, status, share_token")
+    .select("id, title, guest_name, episode_number, season_number, status, share_token, created_at")
     .eq("podcast", "ladrando-ideas")
     .in("status", ["approved", "recorded"])
     .order("created_at", { ascending: false })
