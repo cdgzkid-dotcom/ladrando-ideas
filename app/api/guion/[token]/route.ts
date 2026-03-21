@@ -26,5 +26,18 @@ export async function GET(
     .eq("script_id", script.id)
     .order("created_at", { ascending: true });
 
-  return NextResponse.json({ ...script, comments: comments || [] });
+  // Recent episodes for sidebar
+  const { data: recentEpisodes } = await getSupabase()
+    .from("scripts")
+    .select("id, title, guest_name, episode_number, season_number, status, share_token")
+    .eq("podcast", "ladrando-ideas")
+    .in("status", ["approved", "recorded"])
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  return NextResponse.json({
+    ...script,
+    comments: comments || [],
+    recentEpisodes: recentEpisodes || [],
+  });
 }
