@@ -37,6 +37,12 @@ export default function NuevoGuionPage() {
     const guestMatch = scriptContent.match(/\*\*Invitado:\*\*\s*(.+?)(?:\s*—|$)/m);
     const profileMatch = scriptContent.match(/\*\*Invitado:\*\*\s*.+?—\s*(.+?)(?:\n|$)/m);
 
+    // Extract season/episode from "**Episodio:** T4 · Ep. 2" or "T4 E02" patterns
+    const epLineMatch = scriptContent.match(/\*\*Episodio:\*\*\s*T(\d+)\s*[·.]\s*Ep\.?\s*(\d+)/i);
+    const epFallback = scriptContent.match(/T(\d+)\s*E(\d+)/i);
+    const seasonNum = epLineMatch ? parseInt(epLineMatch[1]) : epFallback ? parseInt(epFallback[1]) : null;
+    const episodeNum = epLineMatch ? parseInt(epLineMatch[2]) : epFallback ? parseInt(epFallback[2]) : null;
+
     const title = titleMatch ? titleMatch[1].trim() : "Guion sin titulo";
     const guestName = guestMatch ? guestMatch[1].trim() : "Invitado";
     const guestProfile = profileMatch ? profileMatch[1].trim() : null;
@@ -49,6 +55,8 @@ export default function NuevoGuionPage() {
           title,
           guest_name: guestName,
           guest_profile: guestProfile,
+          episode_number: episodeNum,
+          season_number: seasonNum,
           content: scriptContent,
         }),
       });

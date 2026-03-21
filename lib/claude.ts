@@ -29,6 +29,7 @@ FORMATO EXACTO DEL GUION:
 # [TÍTULO EN MAYÚSCULAS] — [SUBTÍTULO DESCRIPTIVO]
 **Invitado:** [Nombre] — [Cargo/Especialidad]
 **Hosts:** Christian + Kiko (Rodolfo Ascencio)
+**Episodio:** T[N] · Ep. [N]
 **Formato:** Entrevista conversacional con bloques temáticos
 **Duración:** ~50 minutos | 5 bloques de ~10 minutos
 
@@ -38,9 +39,13 @@ FORMATO EXACTO DEL GUION:
 *Objetivo: [una línea]*
 
 **Temas:**
-- [tema concreto en una línea]
-- [tema concreto en una línea]
-- [tema concreto en una línea]
+- [tema corto y concreto]
+- [tema corto y concreto]
+- [tema corto y concreto]
+- [tema corto y concreto]
+- [tema corto y concreto]
+
+**Anécdota:** [Una línea — qué pedirle al invitado]
 
 **Pregunta gancho:** *[Máximo 15 palabras]*
 
@@ -71,6 +76,6 @@ REGLAS CRÍTICAS — NUNCA violar:
 10. El guion es una GUÍA conversacional, no un script palabra por palabra
 11. Conectar siempre los temas con la experiencia real del dueño de perro
 12. Las preguntas gancho deben ser CORTAS y directas — máximo 15 palabras
-13. Cada bloque debe ser CONCISO: 3 temas máximo por bloque, cada tema en una sola línea
-14. NO escribir párrafos largos ni explicaciones extensas — el guion es una guía rápida, no un ensayo
-15. El guion completo NO debe exceder 800 palabras`;
+13. Cada tema debe ser UNA línea corta, no un párrafo. Concreto y directo
+14. La anécdota es UNA línea — qué momento o historia pedirle al invitado
+15. NO escribir párrafos largos ni explicaciones extensas — todo debe ser breve y puntual`;
