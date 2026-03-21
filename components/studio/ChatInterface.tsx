@@ -10,10 +10,17 @@ type Message = {
 function extractScript(text: string): string | null {
   // Only extract if it has script structure
   if (!text.includes("## BLOQUE") && !text.includes("## CIERRE")) return null;
-  // Strip everything before the first markdown # header
-  const match = text.match(/^(# .+)/m);
-  if (match) {
-    return text.slice(text.indexOf(match[0])).trim();
+  // Find the first # TITLE — could be at line start OR after text with no newline
+  const idx = text.search(/(?:^|\n)# [A-ZÁÉÍÓÚÑ]/m);
+  if (idx >= 0) {
+    // Skip the \n if present
+    const start = text[idx] === "\n" ? idx + 1 : idx;
+    return text.slice(start).trim();
+  }
+  // Fallback: find # anywhere (e.g. "...guion...# TITULO")
+  const fallbackIdx = text.indexOf("# ");
+  if (fallbackIdx >= 0) {
+    return text.slice(fallbackIdx).trim();
   }
   return text.trim();
 }
