@@ -1,11 +1,14 @@
 "use client";
 
-import type { Script } from "@/lib/supabase";
+import { useState, useRef, useEffect } from "react";
 
-type RecentEpisode = Pick<
-  Script,
-  "id" | "title" | "guest_name" | "episode_number" | "season_number" | "status" | "share_token"
->;
+type Episode = {
+  title: string;
+  pubDate: string;
+  audioUrl: string;
+  imageUrl: string;
+  duration: string;
+};
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("es-MX", {
@@ -15,16 +18,23 @@ function formatDate(dateStr: string) {
   });
 }
 
-export default function Sidebar({
-  recentEpisodes,
-}: {
-  recentEpisodes: (RecentEpisode & { created_at?: string })[];
-}) {
+export default function Sidebar() {
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+
+  useEffect(() => {
+    fetch("/api/episodes")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.items) setEpisodes(data.items);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <>
       {/* Desktop sidebar */}
       <aside className="hidden lg:block w-[280px] shrink-0 sticky top-0 h-screen overflow-y-auto border-r border-border bg-bg-alt px-5 py-6 space-y-5">
-        <DesktopSidebar recentEpisodes={recentEpisodes} />
+        <DesktopSidebar episodes={episodes} />
       </aside>
 
       {/* Mobile compact */}
@@ -39,12 +49,19 @@ export default function Sidebar({
 function MobileHeader() {
   return (
     <div className="flex items-center gap-4">
-      <Cover size={64} rounded={12} />
+      <img
+        src="/images/ladrando-cover.jpg"
+        alt="Ladrando Ideas"
+        className="w-16 h-16 rounded-xl object-cover shrink-0"
+        style={{ borderRadius: 12 }}
+      />
       <div className="min-w-0">
         <h2 className="font-display text-base font-bold text-primary tracking-tight">
           LADRANDO IDEAS
         </h2>
-        <p className="text-text-sec text-xs">Christian Dominguez y Kiko</p>
+        <p className="text-text-sec text-xs">
+          Christian Dominguez y Kiko
+        </p>
         <div className="flex gap-3 mt-1.5">
           <a href="https://open.spotify.com/show/0So9xpkBJmSJrPwqkKh5Bp" target="_blank" rel="noopener" className="text-[10px] text-text-ter hover:text-primary transition-colors">Spotify</a>
           <a href="https://www.instagram.com/ladrandoideas" target="_blank" rel="noopener" className="text-[10px] text-text-ter hover:text-primary transition-colors">@ladrandoideas</a>
@@ -55,56 +72,46 @@ function MobileHeader() {
 }
 
 /* ─── DESKTOP ─── */
-function DesktopSidebar({
-  recentEpisodes,
-}: {
-  recentEpisodes: (RecentEpisode & { created_at?: string })[];
-}) {
+function DesktopSidebar({ episodes }: { episodes: Episode[] }) {
   return (
     <>
       {/* 1. PORTADA */}
-      <Cover size="100%" rounded={12} />
+      <img
+        src="/images/ladrando-cover.jpg"
+        alt="Ladrando Ideas"
+        className="w-full aspect-square object-cover"
+        style={{ borderRadius: 12 }}
+        onError={(e) => {
+          const el = e.target as HTMLImageElement;
+          el.style.background = "linear-gradient(135deg, #1A5FA8 0%, #2D7DD2 50%, #0F1419 100%)";
+          el.style.minHeight = "240px";
+        }}
+      />
 
       {/* 2. HOSTS */}
       <Section label="Hosts">
         <div className="space-y-3">
-          <HostRow initials="CD" name="Christian Dominguez" />
-          <HostRow initials="KA" name="Kiko (Rodolfo Ascencio)" />
+          <HostRow img="/images/christian.jpg" initials="CD" name="Christian Dominguez" />
+          <HostRow img="/images/kiko.jpg" initials="KA" name="Kiko (Rodolfo Ascencio)" />
         </div>
       </Section>
 
       {/* 3. ESCUCHANOS EN */}
       <Section label="Escuchanos en">
         <div className="space-y-2">
-          <PlatformButton
-            href="https://open.spotify.com/show/0So9xpkBJmSJrPwqkKh5Bp"
-            icon={<SpotifyIcon />}
-            label="Spotify"
-          />
-          <PlatformButton
-            href="#"
-            icon={<ApplePodcastsIcon />}
-            label="Apple Podcasts"
-          />
-          <PlatformButton
-            href="#"
-            icon={<AmazonMusicIcon />}
-            label="Amazon Music"
-          />
-          <PlatformButton
-            href="https://www.instagram.com/ladrandoideas"
-            icon={<InstagramIcon />}
-            label="@ladrandoideas"
-          />
+          <PlatformButton href="https://open.spotify.com/show/0So9xpkBJmSJrPwqkKh5Bp" icon={<SpotifyIcon />} label="Spotify" />
+          <PlatformButton href="#" icon={<ApplePodcastsIcon />} label="Apple Podcasts" />
+          <PlatformButton href="#" icon={<AmazonMusicIcon />} label="Amazon Music" />
+          <PlatformButton href="https://www.instagram.com/ladrandoideas" icon={<InstagramIcon />} label="@ladrandoideas" />
         </div>
       </Section>
 
       {/* 4. EPISODIOS ANTERIORES */}
-      {recentEpisodes.length > 0 && (
+      {episodes.length > 0 && (
         <Section label="Episodios anteriores">
-          <div className="space-y-3">
-            {recentEpisodes.map((ep) => (
-              <EpisodeRow key={ep.id} episode={ep} />
+          <div className="space-y-4">
+            {episodes.map((ep, i) => (
+              <EpisodeRow key={i} episode={ep} />
             ))}
           </div>
         </Section>
@@ -126,52 +133,32 @@ function Section({ label, children }: { label: string; children: React.ReactNode
   );
 }
 
-function Cover({ size, rounded }: { size: number | string; rounded: number }) {
-  const sizeStyle = typeof size === "number" ? { width: size, height: size } : { width: "100%" };
-  return (
-    <div
-      className="overflow-hidden shrink-0"
-      style={{ ...sizeStyle, borderRadius: rounded, aspectRatio: typeof size === "string" ? "1" : undefined }}
-    >
-      <img
-        src="/images/ladrando-cover.png"
-        alt="Ladrando Ideas"
-        className="w-full h-full object-cover"
-        onError={(e) => {
-          const el = e.target as HTMLImageElement;
-          el.style.display = "none";
-          el.parentElement!.style.background = "linear-gradient(135deg, #1A5FA8 0%, #2D7DD2 50%, #0F1419 100%)";
-          el.parentElement!.innerHTML =
-            '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px"><span style="font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:18px;color:#fff;letter-spacing:0.02em">LADRANDO</span><span style="font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:18px;color:#fff;letter-spacing:0.02em">IDEAS</span></div>';
-        }}
-      />
-    </div>
-  );
-}
+function HostRow({ img, initials, name }: { img: string; initials: string; name: string }) {
+  const [imgError, setImgError] = useState(false);
 
-function HostRow({ initials, name }: { initials: string; name: string }) {
   return (
     <div className="flex items-center gap-3">
-      <div
-        className="w-[48px] h-[48px] rounded-full border-2 border-primary flex items-center justify-center shrink-0"
-        style={{ background: "rgba(45,125,210,0.15)" }}
-      >
-        <span className="text-primary font-bold text-sm">{initials}</span>
-      </div>
+      {!imgError ? (
+        <img
+          src={img}
+          alt={name}
+          className="w-[48px] h-[48px] rounded-full object-cover shrink-0 border-2 border-primary"
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <div
+          className="w-[48px] h-[48px] rounded-full border-2 border-primary flex items-center justify-center shrink-0"
+          style={{ background: "rgba(45,125,210,0.15)" }}
+        >
+          <span className="text-primary font-bold text-sm">{initials}</span>
+        </div>
+      )}
       <span className="text-text-pri text-sm font-medium">{name}</span>
     </div>
   );
 }
 
-function PlatformButton({
-  href,
-  icon,
-  label,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-}) {
+function PlatformButton({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
   return (
     <a
       href={href}
@@ -185,25 +172,101 @@ function PlatformButton({
   );
 }
 
-function EpisodeRow({ episode }: { episode: RecentEpisode & { created_at?: string } }) {
+function EpisodeRow({ episode }: { episode: Episode }) {
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState("0:00");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  function togglePlay() {
+    if (!episode.audioUrl) return;
+
+    if (!audioRef.current) {
+      audioRef.current = new Audio(episode.audioUrl);
+      audioRef.current.addEventListener("timeupdate", () => {
+        const a = audioRef.current;
+        if (!a) return;
+        const pct = a.duration ? (a.currentTime / a.duration) * 100 : 0;
+        setProgress(pct);
+        const m = Math.floor(a.currentTime / 60);
+        const s = Math.floor(a.currentTime % 60);
+        setCurrentTime(`${m}:${s.toString().padStart(2, "0")}`);
+      });
+      audioRef.current.addEventListener("ended", () => {
+        setPlaying(false);
+        setProgress(0);
+        setCurrentTime("0:00");
+      });
+    }
+
+    if (playing) {
+      audioRef.current.pause();
+      setPlaying(false);
+    } else {
+      audioRef.current.play();
+      setPlaying(true);
+    }
+  }
+
+  const dateStr = episode.pubDate ? formatDate(episode.pubDate) : "";
+
   return (
-    <div className="flex items-start gap-3">
-      {/* Play button */}
-      <div className="w-[40px] h-[40px] rounded-full bg-primary flex items-center justify-center shrink-0 mt-0.5">
-        <svg className="w-4 h-4 text-white ml-0.5" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8 5v14l11-7z" />
-        </svg>
+    <div className="space-y-2">
+      <div className="flex items-start gap-3">
+        {/* Play button */}
+        <button
+          onClick={togglePlay}
+          className={`w-[40px] h-[40px] rounded-full flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+            playing ? "bg-primary/80" : "bg-primary"
+          } hover:brightness-110`}
+        >
+          {playing ? (
+            <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4 text-white ml-0.5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          )}
+        </button>
+
+        <div className="min-w-0 flex-1">
+          <p className="text-text-ter text-[11px]">
+            {dateStr}
+          </p>
+          <p className="text-text-pri text-sm font-medium leading-snug mt-0.5" style={{
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}>
+            {episode.title}
+          </p>
+        </div>
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-text-ter text-[11px]">
-          {episode.episode_number ? `EP. ${episode.episode_number}` : ""}
-          {episode.episode_number && episode.created_at ? " · " : ""}
-          {episode.created_at ? formatDate(episode.created_at) : ""}
-        </p>
-        <p className="text-text-pri text-sm font-medium leading-snug line-clamp-2 mt-0.5">
-          {episode.title}
-        </p>
-      </div>
+
+      {/* Progress bar — only show when playing or has progress */}
+      {(playing || progress > 0) && (
+        <div className="flex items-center gap-2 pl-[52px]">
+          <div className="flex-1 h-1 bg-border rounded-full overflow-hidden">
+            <div
+              className="h-full bg-primary rounded-full transition-all"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <span className="text-text-ter text-[10px] tabular-nums">{currentTime}</span>
+        </div>
+      )}
     </div>
   );
 }

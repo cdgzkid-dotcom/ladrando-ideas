@@ -9,7 +9,7 @@ export default function GuestGuionPage() {
   const params = useParams();
   const token = params.token as string;
 
-  const [script, setScript] = useState<(Script & { comments: Comment[]; recentEpisodes?: Script[] }) | null>(null);
+  const [script, setScript] = useState<(Script & { comments: Comment[] }) | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -53,10 +53,6 @@ export default function GuestGuionPage() {
   }
 
   return (
-    <GuestScriptView
-      script={script}
-      initialComments={script.comments || []}
-      recentEpisodes={script.recentEpisodes || []}
-    />
+    <GuestScriptView script={script} initialComments={script.comments || []} />
   );
 }
