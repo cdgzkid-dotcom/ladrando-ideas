@@ -100,8 +100,8 @@ function DesktopSidebar({ episodes }: { episodes: Episode[] }) {
       <Section label="Escuchanos en">
         <div className="space-y-2">
           <PlatformButton href="https://open.spotify.com/show/0So9xpkBJmSJrPwqkKh5Bp" icon={<SpotifyIcon />} label="Spotify" />
-          <PlatformButton href="#" icon={<ApplePodcastsIcon />} label="Apple Podcasts" />
-          <PlatformButton href="#" icon={<AmazonMusicIcon />} label="Amazon Music" />
+          <PlatformButton href="https://podcasts.apple.com/mx/podcast/ladrando-ideas-podcast-de-perros/id1728309744" icon={<ApplePodcastsIcon />} label="Apple Podcasts" />
+          <PlatformButton href="https://music.amazon.com.mx/podcasts/6938af8b-ecf5-4749-8394-439980b32817/ladrando-ideas-podcast-de-perros" icon={<AmazonMusicIcon />} label="Amazon Music" />
           <PlatformButton href="https://www.instagram.com/ladrandoideas" icon={<InstagramIcon />} label="@ladrandoideas" />
         </div>
       </Section>
