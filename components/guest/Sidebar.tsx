@@ -61,10 +61,12 @@ function MobileHeader() {
         <h2 className="font-display text-base font-bold text-primary tracking-tight">
           LADRANDO IDEAS
         </h2>
-        <div className="flex items-center gap-2 mt-1">
+        <div className="flex items-center gap-1.5 mt-1">
           <img src="/images/christian.jpg" alt="Christian" className="w-6 h-6 rounded-full object-cover border border-primary" />
+          <span className="text-text-sec text-[11px]">Christian Dominguez</span>
+          <span className="text-text-ter text-[11px]">·</span>
           <img src="/images/kiko.jpg" alt="Kiko" className="w-6 h-6 rounded-full object-cover border border-primary" />
-          <span className="text-text-sec text-[11px]">Christian y Kiko</span>
+          <span className="text-text-sec text-[11px]">Rodolfo Ascencio (Kiko)</span>
         </div>
       </div>
 
