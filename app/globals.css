@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+/* ===== COLOR SYSTEM ===== */
+:root {
+  /* Primary — Azul Ladrando Ideas */
+  --primary: #2D7DD2;
+  --primary-dim: #1A5FA8;
+  --primary-glow: rgba(45, 125, 210, 0.18);
+  --primary-subtle: rgba(45, 125, 210, 0.10);
+  --primary-border: rgba(45, 125, 210, 0.28);
+
+  /* Dark mode (default) */
+  --bg: #0F1419;
+  --bg-alt: #0A0E13;
+  --bg-card: #161C23;
+  --bg-input: #1A2029;
+  --border: rgba(255, 255, 255, 0.07);
+  --text-pri: #F0EEE8;
+  --text-sec: rgba(240, 238, 232, 0.52);
+  --text-ter: rgba(240, 238, 232, 0.30);
+}
+
+.light {
+  --primary: #2D7DD2;
+  --primary-dim: #1A5FA8;
+  --primary-glow: rgba(45, 125, 210, 0.18);
+  --primary-subtle: rgba(45, 125, 210, 0.10);
+  --primary-border: rgba(45, 125, 210, 0.28);
+
+  --bg: #F4F6F8;
+  --bg-alt: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-input: #FFFFFF;
+  --border: rgba(0, 0, 0, 0.07);
+  --text-pri: #0F1419;
+  --text-sec: rgba(15, 20, 25, 0.52);
+  --text-ter: rgba(15, 20, 25, 0.30);
+}
+
+/* ===== TAILWIND THEME ===== */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-primary-dim: var(--primary-dim);
+  --color-primary-glow: var(--primary-glow);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-border: var(--primary-border);
+  --color-bg: var(--bg);
+  --color-bg-alt: var(--bg-alt);
+  --color-bg-card: var(--bg-card);
+  --color-bg-input: var(--bg-input);
+  --color-border: var(--border);
+  --color-text-pri: var(--text-pri);
+  --color-text-sec: var(--text-sec);
+  --color-text-ter: var(--text-ter);
+
+  --font-display: "Barlow Condensed", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+
+  --animate-fade-up: fadeUp 0.7s ease-out both;
+  --animate-fade-in: fadeIn 0.8s ease-out both;
+  --animate-pulse-soft: pulseSoft 2s ease-in-out infinite;
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+/* ===== BASE ===== */
+body {
+  background: var(--bg);
+  color: var(--text-pri);
+  font-family: var(--font-body);
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* ===== MARKDOWN STYLES ===== */
+.prose-script h1 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-pri);
+}
+.prose-script h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--primary);
+}
+.prose-script h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.prose-script p {
+  margin-bottom: 0.75rem;
+  line-height: 1.8;
+}
+.prose-script ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+.prose-script li {
+  margin-bottom: 0.35rem;
+  line-height: 1.7;
+}
+.prose-script strong {
+  font-weight: 600;
+  color: var(--text-pri);
+}
+.prose-script em {
+  color: var(--text-sec);
+  font-style: italic;
+}
+.prose-script hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+.prose-script blockquote {
+  border-left: 3px solid var(--primary);
+  padding-left: 1rem;
+  color: var(--text-sec);
+  margin: 1rem 0;
+}

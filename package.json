@@ -1,14 +1,32 @@
 {
   "name": "ladrando-ideas",
-  "version": "1.0.0",
-  "description": "Sitio web del podcast Ladrando Ideas",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Sitio web y studio del podcast Ladrando Ideas",
   "scripts": {
-    "dev": "npx serve public -p 3000",
-    "start": "npx serve public -p 3000",
-    "build": "echo 'Static site, no build needed'"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "next": "^15.3.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-markdown": "^9.0.3",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
-    "serve": "^14.2.1"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^15.3.3",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   },
   "engines": {
     "node": ">=18"
