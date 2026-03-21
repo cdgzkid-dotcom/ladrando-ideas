@@ -10,6 +10,9 @@ export async function GET() {
 
     const items: {
       title: string;
+      guest: string;
+      season: number | null;
+      episode: number | null;
       pubDate: string;
       audioUrl: string;
       imageUrl: string;
@@ -31,8 +34,33 @@ export async function GET() {
       const imageMatch = /<itunes:image\s[^>]*href="([^"]+)"/.exec(item);
       const durationMatch = /<itunes:duration>([^<]+)<\/itunes:duration>/.exec(item);
 
+      const rawTitle = get("title");
+
+      // Parse "T3 E8 — Guest Name | Topic" or similar patterns
+      let season: number | null = null;
+      let episode: number | null = null;
+      let guest = "";
+      const epMatch = rawTitle.match(/T(\d+)\s*E(\d+)/i);
+      if (epMatch) {
+        season = parseInt(epMatch[1], 10);
+        episode = parseInt(epMatch[2], 10);
+      }
+      // Extract guest: text after "—" or "-" before "|"
+      const guestMatch = rawTitle.match(/[—–-]\s*(.+?)(?:\s*\||$)/);
+      if (guestMatch) {
+        guest = guestMatch[1].trim();
+      }
+
+      const seasonMatch = /<itunes:season>(\d+)<\/itunes:season>/.exec(item);
+      const episodeMatch = /<itunes:episode>(\d+)<\/itunes:episode>/.exec(item);
+      if (!season && seasonMatch) season = parseInt(seasonMatch[1], 10);
+      if (!episode && episodeMatch) episode = parseInt(episodeMatch[1], 10);
+
       items.push({
-        title: get("title"),
+        title: rawTitle,
+        guest,
+        season,
+        episode,
         pubDate: get("pubDate"),
         audioUrl: audioMatch ? audioMatch[1].trim() : "",
         imageUrl: imageMatch ? imageMatch[1].trim() : "",

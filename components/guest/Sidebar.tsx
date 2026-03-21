@@ -4,6 +4,9 @@ import { useState, useRef, useEffect } from "react";
 
 type Episode = {
   title: string;
+  guest: string;
+  season: number | null;
+  episode: number | null;
   pubDate: string;
   audioUrl: string;
   imageUrl: string;
@@ -217,7 +220,10 @@ function EpisodeRow({ episode }: { episode: Episode }) {
     }
   }
 
-  const dateStr = episode.pubDate ? formatDate(episode.pubDate) : "";
+  const epLabel = [
+    episode.season ? `T${episode.season}` : null,
+    episode.episode ? `Ep. ${episode.episode}` : null,
+  ].filter(Boolean).join(" · ");
 
   return (
     <div className="space-y-2">
@@ -241,10 +247,15 @@ function EpisodeRow({ episode }: { episode: Episode }) {
         </button>
 
         <div className="min-w-0 flex-1">
-          <p className="text-text-ter text-[11px]">
-            {dateStr}
-          </p>
-          <p className="text-text-pri text-sm font-medium leading-snug mt-0.5" style={{
+          {epLabel && (
+            <p className="text-primary text-[11px] font-semibold">{epLabel}</p>
+          )}
+          {episode.guest && (
+            <p className="text-text-pri text-sm font-bold leading-snug">
+              {episode.guest}
+            </p>
+          )}
+          <p className="text-text-sec text-xs leading-snug mt-0.5" style={{
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
@@ -255,7 +266,7 @@ function EpisodeRow({ episode }: { episode: Episode }) {
         </div>
       </div>
 
-      {/* Progress bar — only show when playing or has progress */}
+      {/* Progress bar */}
       {(playing || progress > 0) && (
         <div className="flex items-center gap-2 pl-[52px]">
           <div className="flex-1 h-1 bg-border rounded-full overflow-hidden">

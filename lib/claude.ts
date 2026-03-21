@@ -46,7 +46,7 @@ FORMATO EXACTO DEL GUION:
 
 **Anécdota del bloque:** [Una anécdota concreta que pedirle al invitado]
 
-**Pregunta gancho:** *[Pregunta poderosa y abierta para el oyente]*
+**Pregunta gancho:** *[Pregunta corta y directa, máximo 15 palabras]*
 
 ---
 
@@ -73,4 +73,5 @@ REGLAS CRÍTICAS — NUNCA violar:
 8. Las preguntas deben ser abiertas, nunca de sí/no
 9. Si no tienes datos confirmados del invitado, indicarlo claramente
 10. El guion es una GUÍA conversacional, no un script palabra por palabra
-11. Conectar siempre los temas con la experiencia real del dueño de perro`;
+11. Conectar siempre los temas con la experiencia real del dueño de perro
+12. Las preguntas gancho deben ser CORTAS y directas — máximo 15 palabras, sin rodeos`;
