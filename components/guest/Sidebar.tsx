@@ -51,28 +51,25 @@ export default function Sidebar() {
 /* ─── MOBILE ─── */
 function MobileHeader() {
   return (
-    <div className="space-y-3">
-      {/* Row 1: Cover + title + hosts */}
-      <div className="flex items-center gap-3">
-        <img
-          src="/images/ladrando-cover.jpg"
-          alt="Ladrando Ideas"
-          className="w-14 h-14 rounded-xl object-cover shrink-0"
-        />
-        <div className="min-w-0 flex-1">
-          <h2 className="font-display text-base font-bold text-primary tracking-tight">
-            LADRANDO IDEAS
-          </h2>
-          <div className="flex items-center gap-2 mt-1">
-            <img src="/images/christian.jpg" alt="Christian" className="w-6 h-6 rounded-full object-cover border border-primary" />
-            <img src="/images/kiko.jpg" alt="Kiko" className="w-6 h-6 rounded-full object-cover border border-primary" />
-            <span className="text-text-sec text-[11px]">Christian y Kiko</span>
-          </div>
+    <div className="flex items-center gap-3">
+      <img
+        src="/images/ladrando-cover.jpg"
+        alt="Ladrando Ideas"
+        className="w-14 h-14 rounded-xl object-cover shrink-0"
+      />
+      <div className="min-w-0 flex-1">
+        <h2 className="font-display text-base font-bold text-primary tracking-tight">
+          LADRANDO IDEAS
+        </h2>
+        <div className="flex items-center gap-2 mt-1">
+          <img src="/images/christian.jpg" alt="Christian" className="w-6 h-6 rounded-full object-cover border border-primary" />
+          <img src="/images/kiko.jpg" alt="Kiko" className="w-6 h-6 rounded-full object-cover border border-primary" />
+          <span className="text-text-sec text-[11px]">Christian y Kiko</span>
         </div>
       </div>
 
-      {/* Row 2: Platform icons */}
-      <div className="flex items-center gap-3">
+      {/* Platform icons — top right */}
+      <div className="flex items-center gap-2.5 shrink-0">
         <a href="https://open.spotify.com/show/0So9xpkBJmSJrPwqkKh5Bp" target="_blank" rel="noopener" className="text-text-ter hover:text-[#1DB954] transition-colors" title="Spotify">
           <SpotifyIcon />
         </a>
