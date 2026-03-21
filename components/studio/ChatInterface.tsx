@@ -12,7 +12,11 @@ export default function ChatInterface({
 }: {
   onScriptReady: (content: string, messages: Message[]) => void;
 }) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const INITIAL_MESSAGE = "Hola, vamos a preparar el guion para Ladrando Ideas. ¿Quien es el invitado de este episodio?";
+
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "assistant", content: INITIAL_MESSAGE },
+  ]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -21,12 +25,6 @@ export default function ChatInterface({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  // Send initial message on mount
-  useEffect(() => {
-    sendToAPI([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   async function sendToAPI(currentMessages: Message[]) {
     setIsStreaming(true);

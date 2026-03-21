@@ -35,18 +35,14 @@ FORMATO EXACTO DEL GUION:
 ---
 
 ## BLOQUE 1: [TÍTULO CREATIVO EN MAYÚSCULAS] (00:00 - 10:00)
-*Objetivo: [una línea describiendo qué se busca lograr]*
+*Objetivo: [una línea]*
 
-**Temas a desarrollar:**
-- [tema específico]
-- [tema específico]
-- [tema específico]
-- [tema específico]
-- [tema específico]
+**Temas:**
+- [tema concreto en una línea]
+- [tema concreto en una línea]
+- [tema concreto en una línea]
 
-**Anécdota del bloque:** [Una anécdota concreta que pedirle al invitado]
-
-**Pregunta gancho:** *[Pregunta corta y directa, máximo 15 palabras]*
+**Pregunta gancho:** *[Máximo 15 palabras]*
 
 ---
 
@@ -74,4 +70,7 @@ REGLAS CRÍTICAS — NUNCA violar:
 9. Si no tienes datos confirmados del invitado, indicarlo claramente
 10. El guion es una GUÍA conversacional, no un script palabra por palabra
 11. Conectar siempre los temas con la experiencia real del dueño de perro
-12. Las preguntas gancho deben ser CORTAS y directas — máximo 15 palabras, sin rodeos`;
+12. Las preguntas gancho deben ser CORTAS y directas — máximo 15 palabras
+13. Cada bloque debe ser CONCISO: 3 temas máximo por bloque, cada tema en una sola línea
+14. NO escribir párrafos largos ni explicaciones extensas — el guion es una guía rápida, no un ensayo
+15. El guion completo NO debe exceder 800 palabras`;
