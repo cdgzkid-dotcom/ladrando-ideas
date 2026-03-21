@@ -5,8 +5,8 @@ export async function POST(req: Request) {
 
   if (password === process.env.STUDIO_PASSWORD) {
     const response = NextResponse.json({ success: true });
-    response.cookies.set("studio-auth", password, {
-      httpOnly: true,
+    response.cookies.set("studio-auth", "authenticated", {
+      httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
