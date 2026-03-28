@@ -22,7 +22,7 @@ export async function GET() {
     const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match;
 
-    while ((match = itemRegex.exec(xml)) !== null && items.length < 5) {
+    while ((match = itemRegex.exec(xml)) !== null && items.length < 3) {
       const item = match[1];
       const get = (tag: string) => {
         const m = new RegExp(
